@@ -19,7 +19,7 @@ const getBooks = asyncHandler(async (req,res) =>{
 // @acccess Private
 
 const postBooks = asyncHandler(async (req, res) =>{
-    if(!req.body.title || !req.body.author || !req.body.pages || !req.body.status){
+    if(!req.body){
         res.status(400)
         throw new Error('Your missing some parameters')
     }
