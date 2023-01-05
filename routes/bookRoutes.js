@@ -3,7 +3,8 @@ const { getBooks, postBooks, loanBook, returnBook, deleteBook} = require('../con
 const router = express.Router()
 
 router.route('/').get(getBooks)
-router.route('/:id').post(loanBook).put(returnBook).delete(deleteBook)
+router.route('/:id').put(returnBook).delete(deleteBook)
+router.route('/lend/:id').post(loanBook)
 router.route('/create').post(postBooks)
 
 module.exports = router

@@ -18,6 +18,16 @@ const loginUser = (req, res) =>{
     })
 }
 
+// @desc    Login in
+// @route   POST /api/users/logout
+// @acccess Public
+
+const logoutUser = (req, res) =>{
+    res.status(200).json({
+        msg: "Logout user"
+    })
+}
+
 // @desc    View all books that are mine
 // @route   GET /api/users/me
 // @acccess Private
@@ -31,5 +41,6 @@ const myBooks = (req, res) =>{
 module.exports = {
     registerUser,
     loginUser,
+    logoutUser,
     myBooks
 }

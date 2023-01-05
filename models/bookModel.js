@@ -15,13 +15,14 @@ const bookSchema = mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['free','lended']
+        enum: ['free','lended'],
+        require: true
     },
-    owner: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref: 'User'
-    }
+    // owner: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     required: true,
+    //     ref: 'User'
+    // }
 },
 {
     timestamps: true,
