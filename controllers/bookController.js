@@ -28,7 +28,8 @@ const postBooks = asyncHandler(async (req, res) =>{
         title: req.body.title,
         author: req.body.author,
         pages: req.body.pages,
-        status: req.body.status
+        status: req.body.status,
+        owner: req.user.id
     })
 
     res.status(200).json(book)
