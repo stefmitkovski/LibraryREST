@@ -11,6 +11,7 @@ const getBooks = asyncHandler(async (req,res) =>{
 
     const books = await Book.find({'status': 'free'})
 
+    // books.forEach(element => console.log(element.title))
     res.status(200).json(books)
 
 })
@@ -57,6 +58,7 @@ const loanBook = asyncHandler(async(req,res) =>{
         }else{
             const lending = await Lending.create({
                 title: book.title,
+                bookID: req.params.id,
                 owner: book.owner,
                 reciver: req.user._id
             })

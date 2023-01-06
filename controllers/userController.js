@@ -1,5 +1,7 @@
 const asyncHandler = require('express-async-handler')
 const User = require('../models/userModel')
+const Book = require('../models/bookModel')
+const Lending = require('../models/lendingModel')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 
@@ -85,11 +87,13 @@ const logoutUser = asyncHandler( async(req, res) =>{
 // @route   GET /api/users/me
 // @acccess Private
 
-const myBooks = (req, res) =>{
-    res.status(200).json({
-        msg: "My books"
-    })
-}
+const myBooks = asyncHandler(async (req, res) =>{
+    
+    const own = await Book.find({owner: req.user.id})
+    const lended = await Lending.find({reciver: req.user.id})
+
+    res.status(200).json({own,lended})
+})
 
 const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {expiresIn: '1d'})

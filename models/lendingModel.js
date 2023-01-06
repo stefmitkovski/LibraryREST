@@ -5,6 +5,11 @@ const lendingSchema = mongoose.Schema({
         type: String,
         require: true
     },
+    bookID: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'Book'
+    },
     owner: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
