@@ -78,20 +78,25 @@ const loanBook = asyncHandler(async(req,res) =>{
 // @route   PUT /api/books/:id
 // @acccess Private
 
-const returnBook = (req,res) =>{
+const returnBook = asyncHandler( async(req,res) =>{
 
     if(!req.params.id){
         res.status(400)
         throw new Error('You forgot to enter the id of the book')
     }
 
-    // const book = await Book.findById(req.params.id) 
+    const book = await Book.findById(req.params.id)
+    const lender = await Lending.findOne({title: book.title})
 
-
-    res.status(200).json({
-        msg: "Return a book"
-    })
-}
+    if(lender){
+        if(lender.reciver == req.user.id){
+            await Book.findByIdAndUpdate(req.params.id, {status: 'free'})
+            await Lending.findByIdAndDelete(lender.id)
+            res.status(200).json({msg: 'You sucesfully returned the book'})
+        }
+    }
+    res.status(400).json({msg: "The book doesn't exist or isn't lended to you"})
+})
 
 // @desc    Delete a book
 // @route   DELETE /api/books/:id
