@@ -54,7 +54,7 @@ const loginUser = asyncHandler(async(req, res) =>{
     }
 
     if(user && (await bcrypt.compare(password, user.password))){
-        res.status(200).json({user})
+        res.status(202).json({token: user.token})
     }else{
         res.status(400)
         throw new Error('Invalid credentials')

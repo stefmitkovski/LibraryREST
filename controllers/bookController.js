@@ -1,6 +1,7 @@
 const asyncHandler = require('express-async-handler')
 
 const Book = require('../models/bookModel')
+const Lending = require('../models/lendingModel')
 
 // @desc    Get all books that have a tag free
 // @route   GET /api/books
@@ -28,7 +29,7 @@ const postBooks = asyncHandler(async (req, res) =>{
         title: req.body.title,
         author: req.body.author,
         pages: req.body.pages,
-        status: req.body.status,
+        status: 'free',
         owner: req.user.id
     })
 
@@ -46,12 +47,27 @@ const loanBook = asyncHandler(async(req,res) =>{
         throw new Error('You forgot to enter the id of the book')
     }
 
-    const book = await Book.findById(req.params.id).select("status") 
+    const book = await Book.findById(req.params.id)
 
     if(book == null){
         res.status(400).json({msg: "The book doesn't exists"})
     }else if(book.status == "free"){
-        res.status(200).json("The book is free")
+        if(req.user.id == book.owner){
+            res.status(200).json("Your the owner of this book")    
+        }else{
+            const lending = await Lending.create({
+                title: book.title,
+                owner: book.owner,
+                reciver: req.user._id
+            })
+            if(lending){
+                await Book.findByIdAndUpdate(req.params.id, {status: 'lended'})
+                res.status(200).json("You sucesfully lended the book")
+            }else{
+                // This statment will never be called
+                res.status(400).json("The book is already lended to someone")
+            }
+        }
     }else{
         res.status(200).json("The book is not free")
     }
