@@ -104,14 +104,16 @@ const deleteBook = asyncHandler(async(req,res) =>{
         throw new Error('You forgot to enter the id of the book')
     }
 
-    const book = await Book.findByIdAndDelete(req.params.id)
-    
+    const book = await Book.findById(req.params.id)
+
     if(book == null){
         res.status(400).json({msg: "The book doesn't exist"})
-    }else{
+    }else if(book.status == 'lended'){
+        res.status(400).json({msg: "The book is currently lended to someone"})
+    }else if(req.user.id == book.owner){
+        await Book.findByIdAndDelete(req.params.id)
         res.status(200).json({msg: "Sucessfully deleted the book"})
     }
-        
 })
 
 module.exports = {
