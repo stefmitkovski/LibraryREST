@@ -120,6 +120,8 @@ const deleteBook = asyncHandler(async(req,res) =>{
     }else if(req.user.id == book.owner){
         await Book.findByIdAndDelete(req.params.id)
         res.status(200).json({msg: "Sucessfully deleted the book"})
+    }else{
+        res.status(400).json({msg: "You don't own this book"})
     }
 })
 
